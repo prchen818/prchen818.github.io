@@ -1,7 +1,11 @@
 ---
-title: frp尝试经验
+title: frp配置经验
 date: 2023-02-15 16:52:17
-tags:
+tags: 
+- frp
+- network
+categories:
+- tutorial
 ---
 # frp使用经验
 
