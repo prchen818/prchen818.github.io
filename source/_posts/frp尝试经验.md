@@ -5,7 +5,7 @@ tags:
 - frp
 - network
 categories:
-- tutorial
+- 教程
 ---
 # frp使用经验
 
@@ -46,7 +46,7 @@ enable_prometheus = true
 ```
 
 ### 启动命令
-```shell
+```bash
 frps -c frps.ini
 ```
 ### 启动服务
@@ -69,14 +69,14 @@ WantedBy=multi-user.target
 可执行文件和配置分别放到/usr/bin /etc/frp
 
 执行命令启动服务
-```shell
+```bash
 sudo cp systemd/frps.service /usr/lib/systemd/system/
 sudo systemctl enable frps
 sudo systemctl start frps
 ```
 
 查看端口
-```shell
+```bash
 netstat -ap | grep 7070
 ```
 
@@ -100,6 +100,6 @@ remote_port = 6000 # 穿透端口
 ```
 
 ### 启动
-```shell
+```bash
 ./frpc.exe -c frpc.ini
 ```
