@@ -17,7 +17,7 @@ categories: 教程
 - 在客户端实现一个存根 Stub ，用于发起远程方法调用
 
 定义proto接口规范```xx.proto```
-```
+```java
 // proto协议版本
 syntax = "proto3";
 
@@ -41,7 +41,10 @@ message ServerOutput {
 }
 
 //rpc方法定义
-service price_evaluate {
+//由于根据服务名称直接生成java类，首字母建议大写
+//否则在IDE中导入类时会出现奇怪的问题，但是没有发现编译问题
+service Price_evaluate {
+//service price_evaluate {
    rpc greet (ClientInput) returns (ServerOutput) {}
 }
 ```
@@ -125,4 +128,36 @@ Maven编译插件
 
 创建```/src/main/proto```目录，与```/java```同级
 
-使用```maven protobuf:compile```编译成class文件，生成的文件在```/target/generated-sources/protobuf/java```中
+使用```maven protobuf:compile```、``maven protobuf:compile-custom``编译成java文件，生成的文件在```/target/generated-sources/protobuf```中
+
+将生成的java类copy到项目中，使用``xxxBlockingStub``类调用grpc方法，通过``@GrpcService()``指定grpc服务配置
+
+```java
+@GrpcClient("price_evaluate")
+price_evaluateGrpc.price_evaluateBlockingStub priceEvaluateBlockingStub;
+
+public Double evaluate(Product product){
+    PriceEvaluate.Properties properties = PriceEvaluate.Properties.newBuilder()
+            .setAccentcolor(product.getAccentcolor())
+            .setBasecolor(product.getBasecolor())
+            .setEnvironment(product.getEnvironment())
+            .setEyecolor(product.getEyecolor())
+            .setEyeshape(product.getEyeshape())
+            .setHighlightcolor(product.getHighlightcolor())
+            .setMouth(product.getMouth())
+            .setPattern(product.getPattern())
+            .setPurrstige(product.getPurrstige())
+            .setSecret(product.getSecret()).build();
+    return (double) priceEvaluateBlockingStub.greet(properties).getPriceEvaluated();
+}
+```
+
+yml中作如下配置
+
+```yaml
+grpc:
+  client:
+    price_evaluate: #服务名称
+      address: static://172.20.55.78:50051 # static用于指定静态的服务地址 也可以通过Spring Cloud等服务注册机制获取服务地址
+      negotiation-type: plaintext # 传输层加密 默认为TLS 开发环境中设置为明文避免ssl报错
+```
