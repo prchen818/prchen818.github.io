@@ -103,8 +103,8 @@ theme: butterfly
 # Deployment
 ## Docs: https://hexo.io/docs/one-command-deployment
 deploy:
-- type: 'git'
-  repo: https://github.com/prchen818/prchen818.github.io.git
+# - type: 'git'
+#   repo: https://github.com/prchen818/prchen818.github.io.git
 - type: 'git'
   repo: git@43.153.194.82:/var/repo/hexo.git
   branch: master
